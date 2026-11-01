@@ -22,6 +22,8 @@ It unifies **14 production-grade security tools** across both offensive (Red Tea
 
 > 🌐 **Prefer a Graphical Web Dashboard?** Check out [**Athena-Web**](https://github.com/Sonelu24/Athena-Web) - our companion localhost SOC & Recon platform with real-time streaming terminal output, dual red/blue wings, and forensic artifact triage.
 
+![Athena-CLI Live Demo](docs/athenapresentation.gif)
+
 ---
 
 ## ⚡ Features
