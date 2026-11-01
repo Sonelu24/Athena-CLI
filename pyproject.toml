@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "athena-cli"
+version = "2.0.0"
+description = "Athena - Dual-Use Purple Team Security Suite (CLI)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Alexandru Iosif Mocanu (Sonelu)" }
+]
+keywords = ["cybersecurity", "purple-team", "blue-team", "red-team", "pentesting", "incident-response", "soc", "kali-linux"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Sonelu24/Athena-CLI"
+Repository = "https://github.com/Sonelu24/Athena-CLI"
+"Web Platform" = "https://github.com/Sonelu24/Athena-Web"
+
+[project.scripts]
+athena = "athena:main"
+
+[tool.setuptools]
+py-modules = ["athena"]
+
+[tool.setuptools.package-data]
+"*" = ["tools/**/*.py"]
