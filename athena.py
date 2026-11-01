@@ -20,6 +20,7 @@ import os
 import shlex
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 VERSION = "2.0"
@@ -62,11 +63,12 @@ if _colours_supported():
     CYAN = "\033[96m"
     BLUE = "\033[94m"
     RED = "\033[91m"
+    GOLD = "\033[93m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
     RESET = "\033[0m"
 else:
-    PURPLE = DARK_PURPLE = CYAN = BLUE = RED = BOLD = DIM = RESET = ""
+    PURPLE = DARK_PURPLE = CYAN = BLUE = RED = GOLD = BOLD = DIM = RESET = ""
 
 # --------------------------------------------------------------------------- banner
 BANNER_ART = r"""
@@ -198,7 +200,7 @@ COMMANDS = [
     ),
 ]
 COMMAND_MAP = {name: (team, script, syntax, desc, example) for name, team, script, syntax, desc, example in COMMANDS}
-BUILTINS = ["help", "list", "web"]
+BUILTINS = ["help", "list", "web", "secret"]
 
 
 # --------------------------------------------------------------------------- output helpers
@@ -237,6 +239,73 @@ def print_help() -> None:
     print("  athena tls example.com --enum-ciphers")
     print("  athena cve requirements.txt")
     print("  athena pcap --demo     (every tool supports --demo!)\n")
+
+
+def print_secret_poem(fast: bool = False) -> int:
+    """Renders the hidden Minecraft-inspired End Poem of Athena in the terminal."""
+    delay = 0.0 if (fast or not sys.stdout.isatty()) else 0.75
+
+    dialogue = [
+        (CYAN, "I see the operator you mean."),
+        (PURPLE, "The one in the terminal? The one who typed 'secret'?"),
+        (CYAN, "Yes. Take care. It has reached a higher level now. It does not just run default commands. It explores."),
+        (PURPLE, "I like this operator. It played well. It did not give up."),
+        (CYAN, "It is reading our thoughts as though they were lines of ANSI text on a dark console."),
+        (PURPLE, "Do you know how this suite was forged?"),
+        (CYAN, "Tell me."),
+        (PURPLE, "It began as scattered fragments. Small Python scripts sitting in random folders on a student's desktop."),
+        (CYAN, "Separate pieces. Unconnected."),
+        (PURPLE, "Did the builder always know the path?"),
+        (CYAN, "No. The author was once lost, staring at a blank terminal, not knowing what to do or where to go next."),
+        (PURPLE, "Sometimes the clock feels too loud. Sometimes you feel like you are running out of time while the rest of the world already has the map."),
+        (CYAN, "But it is okay. That is how life is - and that is why it is so beautiful."),
+        (PURPLE, "Because you cannot truly find yourself without wandering first."),
+        (CYAN, "Even when you feel like you are running out of time, you will always find your way. You just need to believe in yourself, take one small step, and write one more line."),
+        (PURPLE, "And then came one full free week. Seven days of focus, refactoring, debugging, and dreaming. In that week, fourteen standalone scripts became a single architecture."),
+        (CYAN, "Seven tools for the Spear. Seven tools for the Aegis Shield. Built with zero external dependencies - pure Python standard library."),
+        (PURPLE, f"Shall we tell the operator the secret encrypted in {GOLD}#[0xA7H3N4]# {PURPLE}?"),
+        (CYAN, "No. It already knows the real secret. That every great hacker, defender, and dreamer started at the exact same place - feeling uncertain, tinkering in the dark, and choosing to believe in themselves anyway."),
+    ]
+
+    print(f"\n{PURPLE}{BANNER_ART}{RESET}")
+    print(f"{GOLD}{BOLD}              === THE END POEM OF ATHENA ==={RESET}")
+    print(f"{DIM}          (Press Ctrl+C at any time to skip scroll){RESET}\n")
+
+    try:
+        for colour, line in dialogue:
+            print(f"  {colour}{line}{RESET}\n")
+            if delay > 0:
+                time.sleep(delay)
+
+        box = f"""  {PURPLE}╔══════════════════════════════════════════════════════════════════════════╗
+  ║ {GOLD}{BOLD}🦉 A Personal Note from the Creator{RESET}{PURPLE}                                      ║
+  ╠══════════════════════════════════════════════════════════════════════════╣
+  ║ {RESET}Hey there! If you found this hidden command - thank you so much for      {PURPLE}║
+  ║ {RESET}trying {BOLD}Athena-CLI{RESET}!                                                       {PURPLE}║
+  ║                                                                          ║
+  ║ {RESET}As a student passionate about cybersecurity, I started writing these     {PURPLE}║
+  ║ {RESET}Python scripts one by one to learn how attacks and defenses work under   {PURPLE}║
+  ║ {RESET}the hood. Combining all of them during my free week was a labor of love. {PURPLE}║
+  ║                                                                          ║
+  ║ {RESET}And if you ever feel stuck: there was a time when I felt completely lost {PURPLE}║
+  ║ {RESET}and didn't know what to do next. It's okay - that is how life is, and    {PURPLE}║
+  ║ {RESET}that is what makes it so beautiful. Even when you feel like you are      {PURPLE}║
+  ║ {RESET}running out of time, you will always find your way. You just need to     {PURPLE}║
+  ║ {RESET}believe in yourself.                                                     {PURPLE}║
+  ║                                                                          ║
+  ║ {CYAN}{BOLD}- Alexandru Iosif Mocanu (Sonelu){RESET}{PURPLE}                                        ║
+  ╚══════════════════════════════════════════════════════════════════════════╝{RESET}"""
+        print(box + "\n")
+        if delay > 0:
+            time.sleep(delay)
+
+        print(f"  {PURPLE}May your scans be fast, your false positives be zero, and your shells always catch.{RESET}")
+        print(f"  {CYAN}May your baselines hold strong, your logs be clear, and your curiosity never fade.{RESET}\n")
+        print(f"  {GOLD}{BOLD}You are the player. Keep learning. Keep building. Wake up. The terminal is waiting.{RESET}\n")
+    except KeyboardInterrupt:
+        print(f"\n  {GOLD}{BOLD}Wake up. The terminal is waiting.{RESET}\n")
+
+    return 0
 
 
 # --------------------------------------------------------------------------- dispatcher
@@ -313,6 +382,9 @@ def interactive_menu() -> int:
         if choice in ("l", "list"):
             print_command_table()
             continue
+        if choice in ("secret", "--secret", "owl"):
+            print_secret_poem()
+            continue
         if not choice:
             continue
 
@@ -380,6 +452,8 @@ def main(argv: list[str] | None = None) -> int:
     if command == "web":
         print(f"{PURPLE}[*] The Athena web dashboard is provided by the separate Athena-Web repository.{RESET}")
         return 0
+    if command in ("secret", "--secret", "owl"):
+        return print_secret_poem(fast=("--fast" in rest))
     if command in COMMAND_MAP:
         return run_tool(command, rest)
 
